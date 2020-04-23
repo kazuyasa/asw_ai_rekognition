@@ -6,11 +6,9 @@ import boto3
 import random
 
 
-
 def upload_img(data):
-"""画像をS3にアップロードする関数
-"""
-
+    """画像をS3にアップロードする関数
+    """
     print("upload_img")
     client = boto3.client("s3", region_name="ap-northeast-1")
     s3_key = str(random.randint(0, 10000))
@@ -26,10 +24,12 @@ def upload_img(data):
     else:
         return s3_key
 
-def check_unmached(response_dict):
+
+def check_matched(response_dict):
     """rekigtionの分類結果を確認する関数
     """
-    return len(response_dict["FaceMatches"])>0
+    return len(response_dict["FaceMatches"]) > 0
+
 
 def compare_actress(s3_key):
     """rekognitionに画像分類させた結果を返す関数
@@ -51,11 +51,11 @@ def compare_actress(s3_key):
                 }
             })
         print(response)
-        if check_unmached(response):
-            response=face_matches = f'{response["FaceMatches"][0]["Similarity"]}%'
+        if check_matched(response):
+            response = face_matches = f'{response["FaceMatches"][0]["Similarity"]}%'
         else:
-            response=face_matches = "UnMatched"
-            
+            response = face_matches = "UnMatched"
+
     except Exception as ex:
         print(ex)
         return "Invalid Image"
